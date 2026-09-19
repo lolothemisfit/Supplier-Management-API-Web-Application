@@ -1,0 +1,32 @@
+# .NET build output
+**/bin/
+**/obj/
+
+# Visual Studio / Rider / VS Code
+.vs/
+.idea/
+.vscode/
+
+# User-specific .NET files
+*.user
+*.suo
+
+# NuGet
+*.nupkg
+packages/
+
+# Node / React
+**/node_modules/
+**/dist/
+
+# Environment files / local secrets
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
