@@ -28,6 +28,9 @@ namespace SupplierApi.Data
                 entity.Property(supplier => supplier.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.Property(supplier => supplier.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
 
+                entity.HasIndex(supplier => new { supplier.Name, supplier.Category }).IsUnique();
+                entity.HasIndex(supplier => supplier.SeedKey).IsUnique().HasFilter("[SeedKey] IS NOT NULL");
+
                 entity.HasMany(supplier => supplier.Services)
                     .WithOne(service => service.Supplier)
                     .HasForeignKey(service => service.SupplierId)
@@ -44,6 +47,9 @@ namespace SupplierApi.Data
                 entity.Property(service => service.Duration).IsRequired();
                 entity.Property(service => service.DurationUnit).HasConversion<string>().IsRequired();
                 entity.Property(service => service.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+
+                entity.HasIndex(service => new { service.SupplierId, service.ServiceName }).IsUnique();
+                entity.HasIndex(service => service.SeedKey).IsUnique().HasFilter("[SeedKey] IS NOT NULL");
             });
         }
     }
