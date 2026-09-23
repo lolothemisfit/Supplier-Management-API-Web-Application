@@ -32,7 +32,7 @@ namespace SupplierApi.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -67,12 +67,22 @@ namespace SupplierApi.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("SeedKey")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SeedKey")
+                        .IsUnique()
+                        .HasFilter("[SeedKey] IS NOT NULL");
+
+                    b.HasIndex("Name", "Category")
+                        .IsUnique();
 
                     b.ToTable("Suppliers");
                 });
@@ -108,6 +118,9 @@ namespace SupplierApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("SeedKey")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ServiceDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -123,7 +136,12 @@ namespace SupplierApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("SeedKey")
+                        .IsUnique()
+                        .HasFilter("[SeedKey] IS NOT NULL");
+
+                    b.HasIndex("SupplierId", "ServiceName")
+                        .IsUnique();
 
                     b.ToTable("SupplierServices");
                 });

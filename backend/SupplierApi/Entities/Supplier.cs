@@ -14,7 +14,7 @@ namespace SupplierApi.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public ICollection<SupplierService> Services { get; set; } = new List<SupplierService>();
-
+        public string? SeedKey { get; set; }
         public bool IsActive { get; set; } = true;
     }
 }

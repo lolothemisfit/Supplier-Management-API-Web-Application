@@ -13,8 +13,8 @@ namespace SupplierApi.Entities
         public PricingUnit PricingUnit { get; set; }
         public int Duration { get; set; }
         public DurationUnit DurationUnit { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
+        public string? SeedKey { get; set; }
         public bool IsActive { get; set; } = true;
-
     }
 }
