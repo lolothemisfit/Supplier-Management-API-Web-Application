@@ -1,0 +1,158 @@
+{
+  "suppliers": [
+    {
+      "seedKey": "ubuntu-trails-lodge-accommodation",
+      "name": "Ubuntu Trails Lodge",
+      "description": "A fictional lodge offering comfortable accommodation for leisure and small group stays.",
+      "category": "Accommodation",
+      "location": "Pretoria",
+      "email": "reservations@ubuntutrails.example",
+      "phoneNumber": "+27 12 555 0101",
+      "services": [
+        {
+          "seedKey": "ubuntu-trails-double-room",
+          "serviceName": "Double Room",
+          "serviceDescription": "A comfortable room suitable for two guests.",
+          "price": 1250.00,
+          "pricingUnit": "PerNight",
+          "duration": 1,
+          "durationUnit": "Days"
+        },
+        {
+          "seedKey": "ubuntu-trails-deluxe-suite",
+          "serviceName": "Deluxe Suite",
+          "serviceDescription": "A spacious suite with additional living space and upgraded amenities.",
+          "price": 1850.00,
+          "pricingUnit": "PerNight",
+          "duration": 1,
+          "durationUnit": "Days"
+        },
+        {
+          "seedKey": "ubuntu-trails-family-villa",
+          "serviceName": "Family Villa",
+          "serviceDescription": "A private villa designed for families or small groups.",
+          "price": 3500.00,
+          "pricingUnit": "PerNight",
+          "duration": 1,
+          "durationUnit": "Days"
+        }
+      ]
+    },
+    {
+      "seedKey": "jacaranda-city-tours-tours",
+      "name": "Jacaranda City Tours",
+      "description": "A fictional tour operator offering guided experiences around Gauteng.",
+      "category": "Tours",
+      "location": "Pretoria",
+      "email": "bookings@jacarandacitytours.example",
+      "phoneNumber": "+27 12 555 0102",
+      "services": [
+        {
+          "seedKey": "jacaranda-city-tour",
+          "serviceName": "Pretoria City Tour",
+          "serviceDescription": "A guided tour covering major landmarks and attractions around Pretoria.",
+          "price": 650.00,
+          "pricingUnit": "PerPerson",
+          "duration": 4,
+          "durationUnit": "Hours"
+        },
+        {
+          "seedKey": "jacaranda-heritage-tour",
+          "serviceName": "Cultural Heritage Tour",
+          "serviceDescription": "A guided cultural experience exploring the history and heritage of the region.",
+          "price": 850.00,
+          "pricingUnit": "PerPerson",
+          "duration": 5,
+          "durationUnit": "Hours"
+        }
+      ]
+    },
+    {
+      "seedKey": "gauteng-express-transfers-transfers",
+      "name": "Gauteng Express Transfers",
+      "description": "A fictional private transfer provider serving airports, hotels, and city destinations.",
+      "category": "Transfers",
+      "location": "Johannesburg",
+      "email": "bookings@gautengexpress.example",
+      "phoneNumber": "+27 11 555 0103",
+      "services": [
+        {
+          "seedKey": "gauteng-airport-transfer",
+          "serviceName": "Airport Transfer",
+          "serviceDescription": "Private transfer between the airport and a selected destination.",
+          "price": 450.00,
+          "pricingUnit": "PerVehicle",
+          "duration": 1,
+          "durationUnit": "Hours"
+        },
+        {
+          "seedKey": "gauteng-private-city-transfer",
+          "serviceName": "Private City Transfer",
+          "serviceDescription": "Private point-to-point transportation within the city.",
+          "price": 600.00,
+          "pricingUnit": "PerVehicle",
+          "duration": 2,
+          "durationUnit": "Hours"
+        }
+      ]
+    },
+    {
+      "seedKey": "highveld-adventures-activities",
+      "name": "Highveld Adventures",
+      "description": "A fictional outdoor activity provider offering guided experiences for visitors and local groups.",
+      "category": "Activities",
+      "location": "Centurion",
+      "email": "hello@highveldadventures.example",
+      "phoneNumber": "+27 12 555 0104",
+      "services": [
+        {
+          "seedKey": "highveld-game-drive",
+          "serviceName": "Game Drive",
+          "serviceDescription": "A guided wildlife viewing experience in a private game reserve.",
+          "price": 900.00,
+          "pricingUnit": "PerPerson",
+          "duration": 3,
+          "durationUnit": "Hours"
+        },
+        {
+          "seedKey": "highveld-bush-walk",
+          "serviceName": "Guided Bush Walk",
+          "serviceDescription": "A guided walking experience focused on wildlife, plants, and the surrounding environment.",
+          "price": 700.00,
+          "pricingUnit": "PerPerson",
+          "duration": 2,
+          "durationUnit": "Hours"
+        }
+      ]
+    },
+    {
+      "seedKey": "urban-drive-car-hire",
+      "name": "Urban Drive Car Hire",
+      "description": "A fictional vehicle rental provider offering short-term vehicle hire.",
+      "category": "CarHire",
+      "location": "Johannesburg",
+      "email": "rentals@urbandrive.example",
+      "phoneNumber": "+27 11 555 0105",
+      "services": [
+        {
+          "seedKey": "urban-economy-car",
+          "serviceName": "Economy Vehicle",
+          "serviceDescription": "A compact vehicle suitable for everyday city travel.",
+          "price": 550.00,
+          "pricingUnit": "PerVehicle",
+          "duration": 1,
+          "durationUnit": "Days"
+        },
+        {
+          "seedKey": "urban-suv",
+          "serviceName": "SUV Rental",
+          "serviceDescription": "A larger vehicle suitable for families and longer journeys.",
+          "price": 950.00,
+          "pricingUnit": "PerVehicle",
+          "duration": 1,
+          "durationUnit": "Days"
+        }
+      ]
+    }
+  ]
+}
