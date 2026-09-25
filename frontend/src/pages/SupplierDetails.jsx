@@ -119,7 +119,7 @@ export default function SupplierDetails()
                                 About this supplier
                             </h2>
 
-                            <p className="mt-4 max-w-4xl leading-7 text-white">
+                            <p className="mt-4 max-w-4xl leading-7 text-gray-800">
                                 {supplier.description}
                             </p>
 
