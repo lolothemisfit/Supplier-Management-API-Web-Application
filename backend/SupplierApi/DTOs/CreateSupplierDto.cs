@@ -28,7 +28,7 @@ namespace SupplierApi.DTOs
 
         [Required]
         [Phone]
-        [MaxLength(30)]
+        [MaxLength(100)]
         public string PhoneNumber { get; set; } = string.Empty;
 
         [Required]

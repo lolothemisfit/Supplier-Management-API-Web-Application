@@ -23,7 +23,6 @@ namespace SupplierApi.DTOs
         public int Duration { get; set; }
 
         [EnumDataType(typeof(DurationUnit))]
-        [Range(1, int.MaxValue)]
         public DurationUnit DurationUnit { get; set; }
     }
 }
