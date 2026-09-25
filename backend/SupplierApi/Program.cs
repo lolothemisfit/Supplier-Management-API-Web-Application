@@ -3,14 +3,31 @@ using SupplierApi.Data;
 using SupplierApi.Interfaces;
 using SupplierApi.Services;
 using SupplierApi.SeedData;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+        );
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISupplierService, Service>();
 builder.Services.AddScoped<DatabaseSeeder>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -24,10 +41,11 @@ using (var scope = app.Services.CreateScope())
     await seeder.SeedAsync();
 }
 
-// Configure the HTTP request pipeline.
-app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors("Frontend");
+
 app.MapControllers();
 
 app.Run();

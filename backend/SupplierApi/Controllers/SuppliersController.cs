@@ -1,6 +1,7 @@
 using SupplierApi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using SupplierApi.DTOs;
+using SupplierApi.Enums;
 
 namespace SupplierApi.Controllers
 {
@@ -41,5 +42,24 @@ namespace SupplierApi.Controllers
             var newSupplier = await _supplierService.CreateSupplierAsync(createSupplierDto);
             return CreatedAtAction(nameof(GetSupplierById), new { supplierId = newSupplier.Id}, newSupplier);
         }
+
+        [HttpGet("categories")]
+        public IActionResult GetCategories()
+        {
+            return Ok(Enum.GetNames<SupplierCategory>());
+        }
+
+        [HttpGet("pricingUnit")]
+        public IActionResult GetPricingUnits()
+        {
+            return Ok(Enum.GetNames<PricingUnit>());
+        }
+
+        [HttpGet("durationUnit")]
+        public IActionResult GetDurationUnits()
+        {
+            return Ok(Enum.GetNames<DurationUnit>());
+        }
+
     }
 }

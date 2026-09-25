@@ -24,7 +24,7 @@ namespace SupplierApi.Data
                 entity.Property(supplier => supplier.Category).HasConversion<string>().IsRequired();
                 entity.Property(supplier => supplier.Location).HasMaxLength(200).IsRequired();
                 entity.Property(supplier => supplier.Email).HasMaxLength(254).IsRequired();
-                entity.Property(supplier => supplier.PhoneNumber).HasMaxLength(30).IsRequired();
+                entity.Property(supplier => supplier.PhoneNumber).HasMaxLength(100).IsRequired();
                 entity.Property(supplier => supplier.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.Property(supplier => supplier.UpdatedAt).HasDefaultValueSql("GETUTCDATE()");
 
