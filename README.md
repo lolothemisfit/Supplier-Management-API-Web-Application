@@ -39,6 +39,8 @@ Install the following before setting up the application:
 * Docker
 * Docker Compose
 
+The setup commands in this README can be followed on Linux, macOS or Windows.
+
 ## Git
 
 Download Git:
@@ -82,7 +84,7 @@ npm --version
 
 ## Docker
 
-Install Docker Desktop for Windows or macOS:
+For Windows or macOS:
 
 https://www.docker.com/products/docker-desktop/
 
@@ -137,26 +139,13 @@ The password is supplied to SQL Server through Docker Compose:
 ```text
 .env
     MSSQL_SA_PASSWORD=YourOwnStrongPassword
-              ↓
+              |
+              v
       Docker Compose
-              ↓
+              |
+              v
         SQL Server
 ```
-
-Start SQL Server from the project root:
-
-```bash
-docker compose up -d
-```
-
-Check that the container is running:
-
-```bash
-docker compose ps
-```
-
-The SQL Server container should be running before continuing.
-
 
 ---
 
@@ -175,6 +164,12 @@ docker compose ps
 ```
 
 The SQL Server container should be running before continuing.
+
+SQL Server is exposed locally on:
+
+```text
+localhost:1433
+```
 
 ---
 
@@ -214,11 +209,11 @@ For example:
 .env
 
 MSSQL_SA_PASSWORD=PasswordA
-        │
-        ▼
+        |
+        v
    SQL Server
-        ▲
-        │
+        ^
+        |
 DefaultConnection
 
 Server=localhost,1433;
@@ -256,32 +251,39 @@ From:
 backend/SupplierApi
 ```
 
-run:
-
-```bash
-dotnet restore
-dotnet ef database update
-```
-
-If the Entity Framework CLI is not installed:
+install the Entity Framework Core CLI if it is not already installed:
 
 ```bash
 dotnet tool install --global dotnet-ef
 ```
 
-Then run:
+Verify:
+
+```bash
+dotnet ef --version
+```
+
+Restore the project dependencies:
+
+```bash
+dotnet restore
+```
+
+Apply the database migrations:
 
 ```bash
 dotnet ef database update
 ```
 
+This creates or updates the database schema in the SQL Server container.
+
 ## Seed Data
 
 The project includes supplier and service seed data in JSON format.
 
-On a fresh database, the application reads the JSON seed data, deserializes it and inserts the records into the database.
+When the API starts, the application's `DatabaseSeeder` reads the JSON seed data, deserializes it and inserts the supplier and service records into the database.
 
-This allows the seeded database to be recreated on another machine without using the original development database.
+This allows a fresh database to be populated without requiring an existing database backup.
 
 ---
 
@@ -297,6 +299,11 @@ run:
 
 ```bash
 dotnet build
+```
+
+Then start the API:
+
+```bash
 dotnet run
 ```
 
@@ -313,6 +320,8 @@ http://localhost:5288/swagger
 ```
 
 Swagger can be used to inspect and test the API independently from the frontend.
+
+Keep this terminal running while using the application.
 
 ---
 
@@ -343,6 +352,8 @@ The frontend is available at:
 ```text
 http://localhost:5173
 ```
+
+Keep this terminal running while using the application.
 
 ---
 
@@ -543,16 +554,16 @@ The frontend and backend are separated:
 
 ```text
 React
-  │
-  │ HTTP
-  ▼
+  |
+  | HTTP
+  v
 ASP.NET Core Web API
-  │
-  │ Entity Framework Core
-  ▼
+  |
+  | Entity Framework Core
+  v
 SQL Server
-  │
-  ▼
+  |
+  v
 Docker
 ```
 
@@ -629,8 +640,6 @@ View logs:
 docker compose logs
 ```
 
----
-
 ## API cannot connect to SQL Server
 
 Check that:
@@ -638,9 +647,9 @@ Check that:
 1. Docker is running.
 2. The SQL Server container is running.
 3. `.env` exists in the project root.
-4. `SA_PASSWORD` is set in `.env`.
+4. `MSSQL_SA_PASSWORD` is set in `.env`.
 5. `ConnectionStrings:DefaultConnection` exists in User Secrets.
-6. The password in `DefaultConnection` matches `SA_PASSWORD`.
+6. The password in `DefaultConnection` matches `MSSQL_SA_PASSWORD`.
 7. Database migrations have been applied.
 
 Check User Secrets:
@@ -648,8 +657,6 @@ Check User Secrets:
 ```bash
 dotnet user-secrets list
 ```
-
----
 
 ## Database has not been created or is out of date
 
@@ -678,19 +685,15 @@ Then run:
 dotnet ef database update
 ```
 
----
-
 ## Seed data is missing
 
-Make sure the database was created successfully and the application's seed process has run.
+Make sure the database was created successfully and the API has been started.
 
-For a fresh development database, apply the migrations:
+The seed process runs when the API starts:
 
 ```bash
-dotnet ef database update
+dotnet run
 ```
-
----
 
 ## Frontend cannot connect to the API
 
@@ -713,8 +716,6 @@ Then start or restart the frontend:
 ```bash
 npm run dev
 ```
-
----
 
 ## Frontend dependencies are missing
 
@@ -752,7 +753,7 @@ Stop SQL Server:
 docker compose down
 ```
 
-Using `docker compose down` keeps the Docker volume and its database data.
+Using `docker compose down` stops and removes the SQL Server container while preserving the Docker volume and its database data.
 
 ---
 
@@ -772,11 +773,11 @@ Each developer or reviewer can create their own SQL Server password.
 
 The password used in `.env` must match the password in that environment's `ConnectionStrings:DefaultConnection` User Secret.
 
-The application does not require the original developer's database credentials to be run on another machine.
+The application does not require the original developer's database credentials to run on another machine.
 
 ---
 
-## Application URLs
+# Application URLs
 
 | Application      | URL                             |
 | ---------------- | ------------------------------- |
