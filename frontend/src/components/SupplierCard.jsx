@@ -53,7 +53,7 @@ export default function SupplierCard({ supplier, index })
                     className={`mb-6 text-sm ${
                         isBlue
                             ? "text-blue-100"
-                            : "text-gray-500"
+                            : "text-gray-800"
                     }`}
                 >
                     {supplier.location}
