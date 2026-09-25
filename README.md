@@ -1,4 +1,4 @@
-# Supplier Management System
+# Supplier Management API Web Application
 
 A full-stack travel supplier management application built using React, ASP.NET Core Web API, Entity Framework Core and SQL Server.
 
