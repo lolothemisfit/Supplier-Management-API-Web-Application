@@ -114,9 +114,9 @@ Replace `<repository-url>` with the repository URL.
 
 # 3. Configure SQL Server
 
-SQL Server runs in Docker and is configured through the included `docker-compose.yml`.
+SQL Server runs in Docker using the included `docker-compose.yml`.
 
-The Docker Compose configuration already contains the SQL Server setup. The only value that needs to be supplied locally is the SQL Server SA password.
+The Docker Compose configuration already contains the SQL Server image, container configuration and port mapping. The only value that needs to be supplied locally is the SQL Server SA password.
 
 ## Create `.env`
 
@@ -125,12 +125,38 @@ Create a `.env` file in the project root, alongside `docker-compose.yml`.
 Add:
 
 ```env
-SA_PASSWORD=YourOwnStrongPassword
+MSSQL_SA_PASSWORD=YourOwnStrongPassword
 ```
 
 Use a strong password of your choice.
 
-The `.env` file is excluded from source control because it contains a password.
+The `.env` file is excluded from source control because it contains a database password.
+
+The password is supplied to SQL Server through Docker Compose:
+
+```text
+.env
+    MSSQL_SA_PASSWORD=YourOwnStrongPassword
+              ↓
+      Docker Compose
+              ↓
+        SQL Server
+```
+
+Start SQL Server from the project root:
+
+```bash
+docker compose up -d
+```
+
+Check that the container is running:
+
+```bash
+docker compose ps
+```
+
+The SQL Server container should be running before continuing.
+
 
 ---
 
@@ -154,55 +180,57 @@ The SQL Server container should be running before continuing.
 
 # 5. Configure .NET User Secrets
 
-The ASP.NET Core API uses:
+The ASP.NET Core API reads the database connection string from:
 
 ```text
 ConnectionStrings:DefaultConnection
 ```
 
-for its database connection.
+The connection string is stored using .NET User Secrets so that the database password is not committed to the repository.
 
-The connection string is stored using .NET User Secrets so that the database password is not stored in the repository.
-
-Navigate to the backend:
+Navigate to the backend project:
 
 ```bash
 cd backend/SupplierApi
 ```
 
-Initialise User Secrets if they have not already been configured:
+If User Secrets have not already been initialised for the project:
 
 ```bash
 dotnet user-secrets init
 ```
 
-Set the database connection:
+Set the database connection string:
 
 ```bash
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "YOUR_CONNECTION_STRING"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=SupplierManagementDb;User Id=sa;Password=YourOwnStrongPassword;TrustServerCertificate=True;"
 ```
 
-The connection string must point to the SQL Server instance exposed by Docker.
-
-The password in the connection string must match the `SA_PASSWORD` value in `.env`.
+Replace `YourOwnStrongPassword` with the same password used in the `.env` file.
 
 For example:
 
 ```text
 .env
-    SA_PASSWORD=PasswordA
 
-        ↓
-
-    SQL Server
-
-        ↑
-
+MSSQL_SA_PASSWORD=PasswordA
+        │
+        ▼
+   SQL Server
+        ▲
+        │
 DefaultConnection
-    Password=PasswordA
+
+Server=localhost,1433;
+Database=SupplierManagementDb;
+User Id=sa;
+Password=PasswordA;
+TrustServerCertificate=True;
 ```
 
-Each developer or reviewer can use their own password. They do not need the original database password.
+The password in the User Secret must match the `MSSQL_SA_PASSWORD` value in `.env`.
+
+Each developer or reviewer can use their own password. The original development password is not required.
 
 Verify the User Secret:
 
