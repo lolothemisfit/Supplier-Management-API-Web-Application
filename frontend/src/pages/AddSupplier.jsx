@@ -1,11 +1,8 @@
 import { createSupplier, getCategory, getSuppliers } from "../services/SupplierApi"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-
 import ServiceForm from "../components/ServiceForm"
 
-import Header from "../components/Header"
-import Footer from "../components/Footer"
 
 export default function AddSupplier()
 {
@@ -23,9 +20,6 @@ export default function AddSupplier()
 
     const [categories, setCategories] = useState([])
     const [showServices, setShowServices] = useState(false)
-
-    const [phoneInput, setPhoneInput] = useState('')
-    const [phoneNumbers, setPhoneNumbers] = useState([])
 
     const [errors, setErrors] = useState({})
     const [submitError, setSubmitError] = useState('')
@@ -56,109 +50,24 @@ export default function AddSupplier()
         setSubmitError('')
     }
 
-    const handlePhoneInputChange = (e) => {
-        setPhoneInput(e.target.value)
-
-        setErrors({
-            ...errors,
-            phoneNumber: ''
-        })
-
-        setSubmitError('')
-    }
-
-    const getPhoneNumberError = (phoneNumber) => {
+    const validatePhoneNumber = (phoneNumber) => {
         const trimmedNumber = phoneNumber.trim()
 
         if (!trimmedNumber) {
             return "Phone number is required"
         }
 
-        const digitsOnly = trimmedNumber.replace(/[\s\-()]/g, "")
-
-        if (!/^\+\d+$/.test(digitsOnly)) {
-            return "Phone number must use international format, e.g. +27 81 457 5566"
+        if (trimmedNumber.length > 100) {
+            return "Phone number cannot exceed 100 characters"
         }
 
-        const digitCount = digitsOnly.substring(1).length
+        const phoneNumberPattern = /^\+?[0-9\s\-()]+$/
 
-        if (digitCount < 7 || digitCount > 15) {
-            return "Phone number must contain between 7 and 15 digits"
+        if (!phoneNumberPattern.test(trimmedNumber)) {
+            return "Please enter a valid phone number"
         }
 
         return ""
-    }
-
-    const addPhoneNumber = () => {
-        const phoneError = getPhoneNumberError(phoneInput)
-
-        if (phoneError) {
-            setErrors({
-                ...errors,
-                phoneNumber: phoneError
-            })
-
-            return
-        }
-
-        const formattedNumber = phoneInput.trim()
-
-        if (phoneNumbers.includes(formattedNumber)) {
-            setErrors({
-                ...errors,
-                phoneNumber: "This phone number has already been added"
-            })
-
-            return
-        }
-
-        const updatedPhoneNumbers = [
-            ...phoneNumbers,
-            formattedNumber
-        ]
-
-        const combinedPhoneNumbers = updatedPhoneNumbers.join(', ')
-
-        if (combinedPhoneNumbers.length > 100) {
-            setErrors({
-                ...errors,
-                phoneNumber: "Phone numbers cannot exceed 100 characters in total"
-            })
-
-            return
-        }
-
-        setPhoneNumbers(updatedPhoneNumbers)
-
-        setSupplierForm({
-            ...supplierForm,
-            phoneNumber: combinedPhoneNumbers
-        })
-
-        setPhoneInput('')
-
-        setErrors({
-            ...errors,
-            phoneNumber: ''
-        })
-    }
-
-    const removePhoneNumber = (indexToRemove) => {
-        const updatedPhoneNumbers = phoneNumbers.filter(
-            (_, index) => index !== indexToRemove
-        )
-
-        setPhoneNumbers(updatedPhoneNumbers)
-
-        setSupplierForm({
-            ...supplierForm,
-            phoneNumber: updatedPhoneNumbers.join(', ')
-        })
-
-        setErrors({
-            ...errors,
-            phoneNumber: ''
-        })
     }
 
     const validateForm = () => {
@@ -205,11 +114,10 @@ export default function AddSupplier()
             newErrors.email = "Please enter a valid email address"
         }
 
-        if (phoneNumbers.length < 1) {
-            newErrors.phoneNumber = "Please add at least one phone number"
-        }
-        else if (phoneNumber.length > 100) {
-            newErrors.phoneNumber = "Phone numbers cannot exceed 100 characters in total"
+        const phoneError = validatePhoneNumber(phoneNumber)
+
+        if (phoneError) {
+            newErrors.phoneNumber = phoneError
         }
 
         if (supplierForm.services.length < 1) {
@@ -219,6 +127,15 @@ export default function AddSupplier()
         setErrors(newErrors)
 
         return Object.keys(newErrors).length === 0
+    }
+
+    const removeService = (indexToRemove) => {
+        setSupplierForm((currentForm) => ({
+            ...currentForm,
+            services: currentForm.services.filter(
+                (_, index) => index !== indexToRemove
+            )
+        }))
     }
 
     const handleSubmit = async (e) => {
@@ -314,8 +231,6 @@ export default function AddSupplier()
 
     return (
         <>
-     
-
             <section className="min-h-screen bg-gray-400 px-4 py-24 sm:px-6 md:px-20">
 
                 <h1 className="mb-4 text-center text-3xl font-bold text-blue-600 sm:text-4xl">
@@ -485,9 +400,8 @@ export default function AddSupplier()
                                     )}
                                 </div>
 
-                                {/* Phone Numbers */}
+                                {/* Phone Number */}
                                 <div>
-
                                     <label
                                         htmlFor="phoneNumber"
                                         className="mb-2 block text-sm font-medium text-gray-900"
@@ -495,27 +409,16 @@ export default function AddSupplier()
                                         Phone Number
                                     </label>
 
-                                    <div className="flex flex-col gap-3 sm:flex-row">
-
-                                        <input
-                                            id="phoneNumber"
-                                            type="tel"
-                                            value={phoneInput}
-                                            onChange={handlePhoneInputChange}
-                                            placeholder="+27 81 457 5566"
-                                            autoComplete="off"
-                                            className="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3 text-black shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        />
-
-                                        <button
-                                            type="button"
-                                            onClick={addPhoneNumber}
-                                            className="w-full shrink-0 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-md transition-colors duration-300 hover:bg-blue-700 sm:w-auto"
-                                        >
-                                            Add Number
-                                        </button>
-
-                                    </div>
+                                    <input
+                                        id="phoneNumber"
+                                        type="tel"
+                                        name="phoneNumber"
+                                        value={supplierForm.phoneNumber}
+                                        onChange={handleChange}
+                                        placeholder="+27 81 457 5566"
+                                        autoComplete="off"
+                                        className="w-full rounded-xl border border-gray-300 bg-gray-100 px-4 py-3 text-black shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
 
                                     <p className="mt-2 text-xs text-gray-500">
                                         Use international format, e.g. +27 81 457 5566.
@@ -526,34 +429,6 @@ export default function AddSupplier()
                                             {errors.phoneNumber}
                                         </p>
                                     )}
-
-                                    {phoneNumbers.length > 0 && (
-                                        <div className="mt-4 space-y-2">
-
-                                            {phoneNumbers.map((number, index) => (
-                                                <div
-                                                    key={index}
-                                                    className="flex flex-col gap-2 rounded-xl bg-gray-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
-                                                >
-
-                                                    <span className="break-all text-sm text-gray-700">
-                                                        {number}
-                                                    </span>
-
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => removePhoneNumber(index)}
-                                                        className="w-full shrink-0 rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white transition-colors duration-300 hover:bg-red-700 sm:w-auto"
-                                                    >
-                                                        Remove
-                                                    </button>
-
-                                                </div>
-                                            ))}
-
-                                        </div>
-                                    )}
-
                                 </div>
 
                             </div>
@@ -593,6 +468,53 @@ export default function AddSupplier()
                                 </p>
                             )}
 
+                            {/* Added Services */}
+                            {supplierForm.services.length > 0 && (
+                                <div className="mb-5 space-y-3">
+
+                                    {supplierForm.services.map((service, index) => (
+                                        <div
+                                            key={index}
+                                            className="rounded-xl border border-gray-200 bg-gray-50 p-4"
+                                        >
+                                            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+
+                                                <div>
+                                                    <h3 className="font-semibold text-gray-900">
+                                                        {service.serviceName}
+                                                    </h3>
+
+                                                    <p className="mt-1 text-sm text-gray-600">
+                                                        {service.serviceDescription}
+                                                    </p>
+
+                                                    <p className="mt-2 text-sm font-medium text-blue-600">
+                                                        R{Number(service.price).toFixed(2)}
+                                                        {" / "}
+                                                        {service.pricingUnit}
+                                                    </p>
+
+                                                    <p className="mt-1 text-sm text-gray-500">
+                                                        Duration: {service.duration} {service.durationUnit}
+                                                    </p>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeService(index)}
+                                                    className="self-start rounded-lg px-3 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+                                                >
+                                                    Remove
+                                                </button>
+
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                </div>
+                            )}
+
+                            {/* Service Form */}
                             {showServices && (
                                 <div className="rounded-2xl bg-gray-100 p-4 sm:p-5">
 
@@ -632,6 +554,8 @@ export default function AddSupplier()
                 </div>
 
             </section>
+
+            {/* Success Modal */}
             {showSuccessModal && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-4">
 
