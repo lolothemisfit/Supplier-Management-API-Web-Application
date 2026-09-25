@@ -19,7 +19,7 @@ export default function SupplierCard({ supplier, index })
             className={`overflow-hidden rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.02] hover:shadow-xl ${
                 isBlue
                     ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-900"
+                    : "bg-gray-400 text-gray-900"
             }`}
         >
 
