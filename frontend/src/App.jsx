@@ -1,15 +1,22 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
+import AddSupplier from './pages/AddSupplier'
+import SupplierDetails from './pages/SupplierDetails'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import ScrollToTop from './components/ScrollToTop'
 
 function App() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">
-        Supplier Management
-      </h1>
+    <div>
+      <ScrollToTop />
+      <Header />
+      <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/suppliers/:id" element={<SupplierDetails />} />
+          <Route path="/suppliers/add" element={<AddSupplier />} />
+      </Routes>
+      <Footer />
     </div>
   )
 }
